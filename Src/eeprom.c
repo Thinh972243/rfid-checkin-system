@@ -51,10 +51,11 @@ int8_t EEPROM_Get_UID_Index(uint8_t *scanned_uid) {
 				break;
 			}
 		}
-		
+		// Match found: Return the index of this user (0 to 19)
 		if (match) {
-			return i; // Match found! Return the index of this user (0 to 19)
+			return i; 
 		}
 	}
-	return -1; // No match found
+	// No match found
+	return -1; 
 }
