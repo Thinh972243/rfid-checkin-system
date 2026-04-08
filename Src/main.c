@@ -31,7 +31,7 @@ int main(void)
 	LCD_SetCursor(0,0);
 	LCD_print_String("Ready");
 	
-	//
+	// Parameter
 	MIFARE_UID user_card;
 	StatusCode status;
 	
@@ -41,13 +41,13 @@ int main(void)
 		if(status == STATUS_OK){
 			status = PICC_Anticollision_Select(&user_card.UID[0], &user_card.sak);
 			if(status == STATUS_OK){
-				
+				status = PICC_HaltA();
 				LCD_Clear();
 				
 				// Get the user index (0-19) from EEPROM
 				int8_t user_index = EEPROM_Get_UID_Index(&user_card.UID[0]);
 				
-				if (user_index != -1) {
+				if (user_index != -1) z
 					// VALID CARD
 					LCD_SetCursor(0, 0); // Row 0
 					
@@ -68,14 +68,8 @@ int main(void)
 					LCD_print_String("No Information");
 					
 				}
-				
-				status = PICC_HaltA();
-				
 				// Delay so user can read the LCD
 				_delay_ms(1000);
-				
-				LCD_Clear();
-				
 			}
 		}
 		_delay_ms(50);
