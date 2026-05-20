@@ -2,7 +2,7 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include <stdbool.h>
-#include <stdio.h>    // 1. THÊM th? vi?n này ?? dùng hàm sprintf
+#include <stdio.h>    // 1. Included to use the sprintf function
 #include "uart.h"
 #include "spi.h"
 #include "mfrc522.h"
@@ -36,7 +36,7 @@ int main(void)
 	MIFARE_UID user_card;
 	StatusCode status;
 	
-	// 2. KHAI BÁO m?ng ??m ?? ch?a chu?i text tr??c khi in ra LCD
+	// 2. DECLARE a character buffer to format the text string before printing
 	char lcd_buffer[16];
 	
 	while (1)
@@ -51,10 +51,10 @@ int main(void)
 				// Get the user index (0-19) from EEPROM
 				int8_t user_index = EEPROM_Get_UID_Index(&user_card.UID[0]);
 				
-				// 3. ?Ã S?A: Thêm d?u { ?? bao tr?n kh?i x? lý th? h?p l?
+				// 3. Process the valid card block
 				if (user_index != -1) {
 					
-					// --- HÀNG 0: IN TR?NG THÁI ---
+					// --- ROW 0: PRINT STATUS ---
 					LCD_SetCursor(0, 0);
 					if (user_status[user_index] == 0) {
 						// User was OUT, now checking IN
@@ -66,22 +66,22 @@ int main(void)
 						LCD_print_String("Check-OUT");
 					}
 					
-					// --- HÀNG 1: IN S? TH? T? NHÂN VIÊN ---
+					// --- APPEND EMPLOYEE INDEX ---
 					
-					// Ghép ch? "Nhan vien " và bi?n user_index vào lcd_buffer
+					// Format the string with " NV " and the user_index into lcd_buffer
 					sprintf(lcd_buffer, " NV %d", user_index);
 					LCD_print_String(lcd_buffer);
 					
 					} else {
-					// INVALID CARD (Th? không có trong h? th?ng)
+					// INVALID CARD (Card not registered in the system)
 					LCD_SetCursor(0, 0);
 					LCD_print_String("No Information");
-				} // K?t thúc if (user_index != -1)
+				} // End of if (user_index != -1)
 				
 				// Delay so user can read the LCD
 				_delay_ms(500);
 				
-				// (Tùy ch?n) Xóa màn hình và hi?n l?i ch? Ready ch? ng??i ti?p theo
+				// (Optional) Clear screen and display "Ready" for the next user
 				LCD_Clear();
 				LCD_SetCursor(0,0);
 				LCD_print_String("Ready");
